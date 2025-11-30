@@ -26,11 +26,11 @@
         #splash img {
             width: auto;
             height: auto;
-            max-width: min(420px, 85vw);
-            max-height: min(420px, 70vh);
+            max-width: 420px;
+            max-height: 420px;
+            width: 100%;
             border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.1);
-            object-fit: contain;
         }
 
         @keyframes fadeIn {
@@ -40,7 +40,7 @@
 
         @keyframes fadeOut {
             0% { opacity: 1; }
-            100% { opacity: 0; visibility: hidden; display: none; }
+            100% { opacity: 0; visibility: hidden; }
         }
 
         .sileo {
@@ -78,12 +78,20 @@
             height: 30px;
             will-change: transform;
             filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.2));
+            -webkit-filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.2));
             z-index: 1;
         }
 
-        /* Debug style - remove after testing */
-        .debug-border {
-            border: 1px solid red;
+        .falling {
+            animation-name: fall;
+            animation-timing-function: linear;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(calc(100vh + 50px));
+            }
         }
 
         @media (max-width: 600px) {
@@ -104,7 +112,7 @@
             }
             
             #splash img {
-                max-width: 90vw;
+                max-width: 90%;
                 max-height: 60vh;
             }
             
@@ -138,7 +146,7 @@
             }
             
             #splash img {
-                max-width: 95vw;
+                max-width: 95%;
                 max-height: 50vh;
             }
             
@@ -178,10 +186,13 @@
             const splash = document.getElementById('splash');
             const splashImg = splash.querySelector('img');
             
-            splash.style.animation = 'none';
+            // Force reflow for older Safari
             setTimeout(() => {
-                splash.style.animation = '';
-            }, 10);
+                splash.style.webkitAnimation = 'none';
+                setTimeout(() => {
+                    splash.style.webkitAnimation = '';
+                }, 10);
+            }, 100);
             
             splashImg.onerror = function() {
                 console.log('Splash image failed to load');
@@ -241,13 +252,13 @@
 <p>Date created: November 29, 2025 - Lines of Code: 170 - <a href="https://github.com/clclayde" class="sourcecode" target="_blank">Source Code</a></p>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function() {
     const container = document.getElementById("flowers");
     const flowerImages = ["f1.png", "f2.png", "f3.png", "f4.png", "f5.png", "f6.png", "f7.png", "f8.png", "f9.png",
         "f10.png", "f11.png"
     ];
     
-    // Preload flower images to ensure they're ready
+    // Preload flower images
     function preloadFlowerImages() {
         flowerImages.forEach(src => {
             const img = new Image();
@@ -268,49 +279,50 @@ document.addEventListener("DOMContentLoaded", () => {
         flower.className = "flower";
         flower.alt = "falling flower";
 
-        // Add error handling for flower images
+        // Better error handling for iOS
         flower.onerror = function() {
-            console.log('Flower image failed to load:', randomFlower);
-            // Create a simple fallback shape if image fails
-            this.style.backgroundColor = 'pink';
-            this.style.borderRadius = '50%';
-            this.style.border = '1px solid rgba(255,255,255,0.5)';
+            // Create colored div fallback for iOS
+            const fallback = document.createElement("div");
+            fallback.className = "flower";
+            fallback.style.backgroundColor = 'pink';
+            fallback.style.borderRadius = '50%';
+            fallback.style.border = '1px solid rgba(255,255,255,0.5)';
+            fallback.style.width = '25px';
+            fallback.style.height = '25px';
+            container.appendChild(fallback);
+            animateFlowerCSS(fallback);
+            return;
         };
-
-        const startX = Math.random() * window.innerWidth;
-        const fallTime = 4000 + Math.random() * 4000; // Shorter fall time for mobile
-        const spin = (Math.random() * 360) + "deg";
-
-        flower.style.left = startX + "px";
-        flower.style.top = "-50px";
-        flower.style.opacity = "1"; // Start visible
 
         container.appendChild(flower);
+        animateFlowerCSS(flower);
+    }
 
-        // Use Web Animations API with better mobile support
-        const animation = flower.animate(
-            [
-                { 
-                    transform: `translateY(0px) rotate(0deg)`, 
-                    opacity: 0.8 
-                },
-                { 
-                    transform: `translateY(${window.innerHeight + 50}px) rotate(${spin})`, 
-                    opacity: 0.8 
-                }
-            ],
-            {
-                duration: fallTime,
-                easing: "linear",
-                fill: "forwards"
-            }
-        );
-
-        animation.onfinish = () => {
+    // Use CSS animations instead of Web Animations API for iOS compatibility
+    function animateFlowerCSS(flower) {
+        const startX = Math.random() * window.innerWidth;
+        const fallTime = 4000 + Math.random() * 4000;
+        const spin = Math.random() * 360;
+        
+        // Set initial position
+        flower.style.left = startX + 'px';
+        flower.style.top = '-50px';
+        flower.style.opacity = '0.8';
+        
+        // Apply rotation
+        flower.style.transform = 'rotate(' + spin + 'deg)';
+        flower.style.webkitTransform = 'rotate(' + spin + 'deg)';
+        
+        // Add falling animation class
+        flower.classList.add('falling');
+        flower.style.animationDuration = fallTime + 'ms';
+        
+        // Remove element after animation completes
+        setTimeout(function() {
             if (flower.parentNode) {
-                flower.remove();
+                flower.parentNode.removeChild(flower);
             }
-        };
+        }, fallTime);
     }
 
     // Handle window resize
@@ -318,43 +330,50 @@ document.addEventListener("DOMContentLoaded", () => {
         maxFlowers = window.innerWidth <= 600 ? 15 : 25;
     });
 
-    // Start flower animation sooner and more frequently on mobile
+    // Check if Web Animations API is supported
+    const supportsWebAnimations = 'animate' in document.documentElement;
+    
+    // Start flower animation
     const isMobile = window.innerWidth <= 600;
-    const startDelay = isMobile ? 2000 : 4500; // Start sooner on mobile
-    const intervalTime = isMobile ? 300 : 450; // More frequent on mobile
+    const startDelay = isMobile ? 2000 : 4500;
+    const intervalTime = isMobile ? 300 : 450;
 
-    setTimeout(() => {
-        createFlower(); // Create first flower immediately
+    setTimeout(function() {
+        createFlower();
         setInterval(createFlower, intervalTime);
     }, startDelay);
-
-    // Debug: Check if flowers container is working
-    console.log('Flowers container:', container);
-    console.log('Mobile device:', isMobile);
 });
 
-// Better touch handling
+// Better touch handling for iOS
 document.addEventListener('touchstart', function(e) {
     if (e.touches.length > 1) {
         e.preventDefault();
     }
-}, { passive: false });
+}, false);
 
-let lastTouchEnd = 0;
+var lastTouchEnd = 0;
 document.addEventListener('touchend', function(e) {
-    const now = (new Date()).getTime();
+    var now = (new Date()).getTime();
     if (now - lastTouchEnd <= 300) {
         e.preventDefault();
     }
     lastTouchEnd = now;
 }, false);
 
-// Force redraw for mobile browsers
-window.addEventListener('load', function() {
-    document.body.style.display = 'none';
-    document.body.offsetHeight; // Trigger reflow
-    document.body.style.display = 'block';
-});
+// iOS specific fixes
+if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
+    // Additional iOS fixes
+    document.addEventListener('touchmove', function(e) {
+        if (e.scale !== 1) {
+            e.preventDefault();
+        }
+    }, false);
+    
+    // Force hardware acceleration for smoother animations
+    var style = document.createElement('style');
+    style.textContent = '.flower { -webkit-transform: translateZ(0); transform: translateZ(0); }';
+    document.head.appendChild(style);
+}
 </script>
 
 </body>
