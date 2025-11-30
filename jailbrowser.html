@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>clclayde.github.io</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+            background: white;
+            color: black;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .jailbreak-tool {
+            background: #f5f5f5;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #ccc;
+        }
+        select, input {
+            padding: 8px;
+            margin: 5px 0;
+            background: white;
+            color: black;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 20px 0;
+        }
+        .sourcecode {
+            color: pink;
+            text-decoration: none;
+        }
+        .nolink {
+            color: inherit;
+            text-decoration: none;
+        }
+        .compact-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 10px;
+            align-items: end;
+        }
+        @media (max-width: 600px) {
+            .compact-form {
+                grid-template-columns: 1fr;
+            }
+            body {
+                margin: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Jailbrowser</h1>
+<p>Select your device and iOS version to see jailbreak recommendations.</p>
+<ul>
+    <li><small>Note that this isn't a stable release, so expect inaccurate recommendations.</small></li>
+    <li><small>For bugs, please state an issue via github.com/clclayde/clclayde.github.io</small></li>
+</ul>
+
+<div class="compact-form">
+    <div class="form-group">
+        <label for="device">Device Model:</label>
+        <select id="device">
+            <option value="a7">iPhone 5S, iPad Air 1, Mini 2/3 (A7)</option>
+            <option value="a8">iPhone 6/6+, iPad Mini 4 (A8)</option>
+            <option value="a9">iPhone 6S/6S+, SE 1st (A9)</option>
+            <option value="a10">iPhone 7/7+ (A10)</option>
+            <option value="a11">iPhone 8/8+, X (A11)</option>
+            <option value="a12">iPhone XS/XS+/XR (A12)</option>
+            <option value="a13">iPhone 11 series (A13)</option>
+            <option value="a14">iPhone 12 series (A14)</option>
+            <option value="a15">iPhone 13 series (A15)</option>
+            <option value="a16">iPhone 14 series (A16)</option>
+            <option value="a17">iPhone 15 series (A17)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="ios">iOS Version:</label>
+        <select id="ios"></select>
+    </div>
+
+    <div class="form-group">
+        <button onclick="checkJailbreak()">Check</button>
+    </div>
+</div>
+
+<div id="results" style="display:none;"></div>
+
+<hr>
+
+<h2>Useful Links</h2>
+<ul>
+    <li><a href="https://checkra.in" target="_blank" class="nolink">Checkra1n</a></li>
+    <li><a href="https://unc0ver.dev" target="_blank" class="nolink">unc0ver</a></li>
+    <li><a href="https://github.com/opa334/Dopamine" target="_blank" class="nolink">Dopamine</a></li>
+    <li><a href="https://www.reddit.com/r/jailbreak/" target="_blank" class="nolink">r/jailbreak</a></li>
+</ul>
+
+<hr>
+
+<p>Date created: November 30, 2025 - Lines of Code: 281 - <a href="https://github.com/clclayde/clclayde.github.io/" class="sourcecode" target="_blank">Source Code</a></p>
+
+<script>
+const iosVersions = {
+    'a7': ['10.0', '11.0', '12.0'],
+    'a8': ['10.0', '11.0', '12.0'],
+    'a9': ['11.0', '12.0', '13.0', '14.0', '15.0'],
+    'a10': ['12.0', '13.0', '14.0', '15.0'],
+    'a11': ['13.0', '14.0', '15.0', '16.0'],
+    'a12': ['14.0', '15.0', '16.0', '17.0'],
+    'a13': ['15.0', '16.0', '17.0'],
+    'a14': ['16.0', '17.0'],
+    'a15': ['17.0'],
+    'a16': ['17.0'],
+    'a17': ['17.0']
+};
+
+function updateIosVersions() {
+    const device = document.getElementById('device').value;
+    const iosSelect = document.getElementById('ios');
+    
+    iosSelect.innerHTML = '';
+    
+    if (iosVersions[device]) {
+        iosVersions[device].forEach(version => {
+            const option = document.createElement('option');
+            option.value = version;
+            option.textContent = `iOS ${version}`;
+            iosSelect.appendChild(option);
+        });
+    }
+    
+    if (iosVersions[device] && iosVersions[device].length > 0) {
+        iosSelect.value = iosVersions[device][iosVersions[device].length - 1];
+    }
+}
+
+function checkJailbreak() {
+    const device = document.getElementById('device').value;
+    const ios = document.getElementById('ios').value;
+    
+    const result = generateRecommendation(device, ios);
+    document.getElementById('results').innerHTML = result;
+    document.getElementById('results').style.display = 'block';
+}
+
+function generateRecommendation(device, iosVersion) {
+    let result = `<h2>Jailbreak Options for iOS ${iosVersion}</h2>`;
+    
+    const isOldDevice = ['a7', 'a8', 'a9', 'a10', 'a11'].includes(device);
+    
+    if (iosVersion.startsWith("10.") || iosVersion.startsWith("11.") || iosVersion.startsWith("12.")) {
+        if (isOldDevice) {
+            result += `<div class='jailbreak-tool'>
+                <a href="https://checkra.in" target="_blank" class="nolink">Checkra1n</a><br>
+                Devices: iPhone 5S (A7) to iPhone X (A11)<br>
+                Notes: Requires computer
+            </div>`;
+        }
+        
+        result += `<div class='jailbreak-tool'>
+            <a href="https://unc0ver.dev" target="_blank" class="nolink">unc0ver</a><br>
+            Support: iOS 11.0-14.8<br>
+            Notes: App-based, no computer needed
+        </div>`;
+    }
+    
+    else if (iosVersion.startsWith("13.") || iosVersion.startsWith("14.")) {
+        if (isOldDevice) {
+            result += `<div class='jailbreak-tool'>
+                <a href="https://checkra.in" target="_blank" class="nolink">Checkra1n</a><br>
+                Devices: iPhone 5S to iPhone X<br>
+                Notes: Most reliable for A7-A11 devices
+            </div>`;
+        }
+        
+        if (!isOldDevice) {
+            result += `<div class='jailbreak-tool'>
+                <a href="https://unc0ver.dev" target="_blank" class="nolink">unc0ver</a><br>
+                Support: iOS 13.0-14.8<br>
+                Notes: For iPhone XS and newer
+            </div>`;
+        }
+    }
+    
+    else if (iosVersion.startsWith("15.")) {
+        if (isOldDevice) {
+            result += `<div class='jailbreak-tool'>
+                <a href="https://checkra.in" target="_blank" class="nolink">Checkra1n RG</a><br>
+                Devices: iPhone 5S to iPhone X<br>
+                Support: iOS 15.0-15.8.2
+            </div>`;
+        } else {
+            result += `<div class='jailbreak-tool'>
+                <a href="https://github.com/opa334/Dopamine" target="_blank" class="nolink">Dopamine</a><br>
+                Support: iOS 15.0-15.8.2<br>
+                Devices: iPhone XS and newer
+            </div>`;
+        }
+    }
+    
+    else if (iosVersion.startsWith("16.")) {
+        if (isOldDevice) {
+            result += `<div class='jailbreak-tool'>
+                <a href="https://checkra.in" target="_blank" class="nolink">Checkra1n RG</a><br>
+                Devices: iPhone 5S to iPhone X ONLY<br>
+                Support: iOS 16.0-16.7.2
+            </div>`;
+        } else {
+            result += `<div class='jailbreak-tool'>
+                <a href="https://github.com/opa334/Dopamine" target="_blank" class="nolink">Dopamine 2.0</a><br>
+                Support: iOS 16.0-16.6.1<br>
+                Notes: In development
+            </div>`;
+        }
+    }
+    
+    else if (iosVersion.startsWith("17.")) {
+        result += `<div class='jailbreak-tool'>
+            No Public Jailbreak Available<br>
+            iOS 17+ not currently jailbreakable
+        </div>`;
+    }
+    
+    else {
+        result += `<div class='jailbreak-tool'>
+            Unknown iOS Version<br>
+            Please enter a valid iOS version
+        </div>`;
+    }
+    
+    result += `<div class='jailbreak-tool'>
+        Important Notes:<br>
+        • Always backup your device first<br>
+        • Check r/jailbreak for latest updates<br>
+        • Use official tools from trusted sources only
+    </div>`;
+    
+    return result;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    updateIosVersions();
+    document.getElementById('device').addEventListener('change', updateIosVersions);
+});
+</script>
+
+</body>
+</html>

@@ -81,6 +81,14 @@
             100% { -webkit-transform: translateX(0) translateY(0); }
         }
 
+        .alpha {
+            color: rgb(210, 135, 74);
+        }
+
+        .released {
+            color: rgb(89, 255, 47);
+        }
+
         .sileo {
             color: teal;
         }
@@ -124,6 +132,11 @@
             animation-name: fall;
             animation-timing-function: linear;
             animation-fill-mode: forwards;
+        }
+
+        a.nolink {
+            margin-bottom: 10px;
+            display: block;
         }
 
         @keyframes fall {
@@ -220,21 +233,17 @@
             }
         }, 1000);
 
-        // Add shake effect to links with href="#"
         document.addEventListener('DOMContentLoaded', function() {
             const shakeLinks = document.querySelectorAll('a[href="#"].shake-on-click');
             
             shakeLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
-                    e.preventDefault(); // Prevent default # behavior
+                    e.preventDefault(); 
                     
-                    // Add shaking class
                     this.classList.add('shaking');
                     
-                    // Force reflow for older browsers
                     void this.offsetWidth;
                     
-                    // Remove shaking class after 2 seconds
                     setTimeout(() => {
                         this.classList.remove('shaking');
                     }, 300);
@@ -246,7 +255,6 @@
             const splash = document.getElementById('splash');
             const splashImg = splash.querySelector('img');
             
-            // Force reflow for older Safari
             setTimeout(() => {
                 splash.style.webkitAnimation = 'none';
                 setTimeout(() => {
@@ -287,21 +295,39 @@
 </p>
 
 <h2>Languages</h2>
-<p> HTML, CSS, JS, PAWN, C, C++, Swift (currently learning)</p>
+<p> HTML, CSS, JS, PAWN, C, C++, Arduino, Swift (currently learning)</p>
 
 <h2>Projects</h2>
 <ul>
     <a href="#" target="_blank" class="nolink shake-on-click" title="Solstice - A Linux distribution designed for jailbreaking iOS devices using checkra1n.">
         Solstice - A Linux distribution designed for jailbreaking iOS devices using checkra1n.
+        <br>
+        <small style="color: #e6e6e6; margin-left: 10px;">Status: In Development</small>
     </a>
-    <br>
-    <small style="color: #e6e6e6; margin-left: 10px;">Status: In Development</small>
+
+    <a href="https://github.com/clclayde/creativeroleplay/" class="nolink" target="_blank" title="Creative Roleplay - A SA-MP Gamemode written in PAWN inspired by Los Santos Roleplay and is based on a zGaming edit i found on burgershot.">
+        Creative Roleplay - A SA-MP Gamemode written in PAWN inspired by Los Santos Roleplay and is based on a zGaming edit i found on burgershot.
+        <br>
+        <small style="color: #e6e6e6; margin-left: 10px;">Status: <span class="alpha">Alpha</span></small>
+    </a>
+
+    <a href="#" target="_blank" class="nolink shake-on-click" title="County Trucking - A SA-MP Trucking Gamemode written in PAWN.">
+        County Trucking - A SA-MP Trucking Gamemode written in PAWN.
+        <br>
+        <small style="color: #e6e6e6; margin-left: 10px;">Status: In Development</small>
+    </a>
+
+    <a href="jailbrowser.html" target="_blank" class="nolink" title="Jailbrowser - A clean web tool that matches iOS devices with compatible jailbreaks">
+        Jailbrowser - A clean web tool that matches iOS devices with compatible jailbreaks
+        <br>
+        <small style="color: #e6e6e6; margin-left: 10px;">Status: <span class="released">Experimental Release</span></small>
+    </a>
 </ul>
 
 <h2>Links</h2>
 <ul>
     <li><a href="https://www.facebook.com/clclayde" target="_blank" rel="noopener" class="nolink">Facebook</a></li>
-    <li><a href="https://github.com/clclayde" class="nolink">Github</a></li>
+    <li><a href="https://github.com/clclayde" target="_blank" class="nolink">Github</a></li>
     <li><a href="https://mail.google.com/mail/u/0/?fs=1&tf=cm&to=2009.claydeloyola@email.com" class="nolink">Slide me a mail</a></li>
     <li><a href="sileo://source/https://clclayde.github.io/" class="nolink"><span class="sileo">Sileo</span> Repository</a></li>
     <li><a href="cydia://url/https://cydia.saurik.com/api/share#?source=%20https://clclayde.github.io/" class="nolink"><span class="cydia">Cydia</span> Repository</a></li>
@@ -309,7 +335,7 @@
 
 <hr>
 
-<p>Date created: November 29, 2025 - Lines of Code: 440 - <a href="https://github.com/clclayde" class="sourcecode" target="_blank">Source Code | Written in HTML - CSS, in a single file</a></p>
+<p>Date created: November 29, 2025 - Lines of Code: 451 - <a href="https://github.com/clclayde/clclayde.github.io/" class="sourcecode" target="_blank">Source Code</a></p>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -318,7 +344,6 @@ document.addEventListener("DOMContentLoaded", function() {
         "f10.png", "f11.png"
     ];
     
-    // Preload flower images
     function preloadFlowerImages() {
         flowerImages.forEach(src => {
             const img = new Image();
@@ -339,9 +364,7 @@ document.addEventListener("DOMContentLoaded", function() {
         flower.className = "flower";
         flower.alt = "falling flower";
 
-        // Better error handling for iOS
         flower.onerror = function() {
-            // Create colored div fallback for iOS
             const fallback = document.createElement("div");
             fallback.className = "flower";
             fallback.style.backgroundColor = 'pink';
@@ -358,26 +381,21 @@ document.addEventListener("DOMContentLoaded", function() {
         animateFlowerCSS(flower);
     }
 
-    // Use CSS animations instead of Web Animations API for iOS compatibility
     function animateFlowerCSS(flower) {
         const startX = Math.random() * window.innerWidth;
         const fallTime = 4000 + Math.random() * 4000;
         const spin = Math.random() * 360;
         
-        // Set initial position
         flower.style.left = startX + 'px';
         flower.style.top = '-50px';
         flower.style.opacity = '0.8';
         
-        // Apply rotation
         flower.style.transform = 'rotate(' + spin + 'deg)';
         flower.style.webkitTransform = 'rotate(' + spin + 'deg)';
         
-        // Add falling animation class
         flower.classList.add('falling');
         flower.style.animationDuration = fallTime + 'ms';
         
-        // Remove element after animation completes
         setTimeout(function() {
             if (flower.parentNode) {
                 flower.parentNode.removeChild(flower);
@@ -385,15 +403,12 @@ document.addEventListener("DOMContentLoaded", function() {
         }, fallTime);
     }
 
-    // Handle window resize
     window.addEventListener('resize', function() {
         maxFlowers = window.innerWidth <= 600 ? 15 : 25;
     });
 
-    // Check if Web Animations API is supported
     const supportsWebAnimations = 'animate' in document.documentElement;
     
-    // Start flower animation
     const isMobile = window.innerWidth <= 600;
     const startDelay = isMobile ? 2000 : 4500;
     const intervalTime = isMobile ? 300 : 450;
@@ -404,7 +419,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }, startDelay);
 });
 
-// Better touch handling for iOS
 document.addEventListener('touchstart', function(e) {
     if (e.touches.length > 1) {
         e.preventDefault();
@@ -420,16 +434,13 @@ document.addEventListener('touchend', function(e) {
     lastTouchEnd = now;
 }, false);
 
-// iOS specific fixes
 if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
-    // Additional iOS fixes
     document.addEventListener('touchmove', function(e) {
         if (e.scale !== 1) {
             e.preventDefault();
         }
     }, false);
     
-    // Force hardware acceleration for smoother animations
     var style = document.createElement('style');
     style.textContent = '.flower { -webkit-transform: translateZ(0); transform: translateZ(0); }';
     document.head.appendChild(style);
