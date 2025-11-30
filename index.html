@@ -43,6 +43,44 @@
             100% { opacity: 0; visibility: hidden; }
         }
 
+        .shake-on-click {
+            display: inline-block;
+            transition: none;
+        }
+
+        .shaking {
+            animation: furiousShake 0.1s infinite;
+        }
+
+        @keyframes furiousShake {
+            0% { transform: translateX(0) translateY(0); }
+            10% { transform: translateX(-3px) translateY(-2px); }
+            20% { transform: translateX(3px) translateY(2px); }
+            30% { transform: translateX(-4px) translateY(-3px); }
+            40% { transform: translateX(4px) translateY(3px); }
+            50% { transform: translateX(-5px) translateY(-4px); }
+            60% { transform: translateX(5px) translateY(4px); }
+            70% { transform: translateX(-4px) translateY(-3px); }
+            80% { transform: translateX(4px) translateY(3px); }
+            90% { transform: translateX(-3px) translateY(-2px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+
+        /* Vendor prefixes for iOS */
+        @-webkit-keyframes furiousShake {
+            0% { -webkit-transform: translateX(0) translateY(0); }
+            10% { -webkit-transform: translateX(-3px) translateY(-2px); }
+            20% { -webkit-transform: translateX(3px) translateY(2px); }
+            30% { -webkit-transform: translateX(-4px) translateY(-3px); }
+            40% { -webkit-transform: translateX(4px) translateY(3px); }
+            50% { -webkit-transform: translateX(-5px) translateY(-4px); }
+            60% { -webkit-transform: translateX(5px) translateY(4px); }
+            70% { -webkit-transform: translateX(-4px) translateY(-3px); }
+            80% { -webkit-transform: translateX(4px) translateY(3px); }
+            90% { -webkit-transform: translateX(-3px) translateY(-2px); }
+            100% { -webkit-transform: translateX(0) translateY(0); }
+        }
+
         .sileo {
             color: teal;
         }
@@ -174,13 +212,35 @@
     <script>
         let timeLeft = 4;
         const titleTimer = setInterval(() => {
-            document.title = `Splash - ${timeLeft}s left`;
+            document.title = `a luh bit of information - ${timeLeft}s left`;
             timeLeft--;
             if (timeLeft < 0) {
                 clearInterval(titleTimer);
                 document.title = "clclayde.github.io";
             }
         }, 1000);
+
+        // Add shake effect to links with href="#"
+        document.addEventListener('DOMContentLoaded', function() {
+            const shakeLinks = document.querySelectorAll('a[href="#"].shake-on-click');
+            
+            shakeLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent default # behavior
+                    
+                    // Add shaking class
+                    this.classList.add('shaking');
+                    
+                    // Force reflow for older browsers
+                    void this.offsetWidth;
+                    
+                    // Remove shaking class after 2 seconds
+                    setTimeout(() => {
+                        this.classList.remove('shaking');
+                    }, 300);
+                });
+            });
+        });
 
         document.addEventListener('DOMContentLoaded', function() {
             const splash = document.getElementById('splash');
@@ -231,7 +291,7 @@
 
 <h2>Projects</h2>
 <ul>
-    <a href="#" target="_blank" class="nolink" title="Solstice - A Linux distribution designed for jailbreaking iOS devices using checkra1n.">
+    <a href="#" target="_blank" class="nolink shake-on-click" title="Solstice - A Linux distribution designed for jailbreaking iOS devices using checkra1n.">
         Solstice - A Linux distribution designed for jailbreaking iOS devices using checkra1n.
     </a>
     <br>
@@ -249,7 +309,7 @@
 
 <hr>
 
-<p>Date created: November 29, 2025 - Lines of Code: 170 - <a href="https://github.com/clclayde" class="sourcecode" target="_blank">Source Code</a></p>
+<p>Date created: November 29, 2025 - Lines of Code: 440 - <a href="https://github.com/clclayde" class="sourcecode" target="_blank">Source Code | Written in HTML - CSS, in a single file</a></p>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
