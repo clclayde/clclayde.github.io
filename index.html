@@ -15,7 +15,7 @@
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px); /* Safari support */
+            -webkit-backdrop-filter: blur(15px);
             opacity: 0;
             animation: fadeIn 1s ease-out forwards, fadeOut 1s ease-in forwards 4.5s;
             z-index: 9999;
@@ -75,13 +75,21 @@
         .flower {
             position: absolute;
             width: 30px;
+            height: 30px;
             will-change: transform;
             filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.2));
+            z-index: 1;
+        }
+
+        /* Debug style - remove after testing */
+        .debug-border {
+            border: 1px solid red;
         }
 
         @media (max-width: 600px) {
             .flower {
-                width: 22px;
+                width: 25px;
+                height: 25px;
             }
             
             body {
@@ -134,19 +142,17 @@
                 max-height: 50vh;
             }
             
+            .flower {
+                width: 20px;
+                height: 20px;
+            }
+            
             h1 {
                 font-size: 1.6em;
             }
             
             h2 {
                 font-size: 1.3em;
-            }
-        }
-
-        @media (max-width: 320px) {
-            #splash img {
-                max-width: 98vw;
-                max-height: 45vh;
             }
         }
 
@@ -168,24 +174,17 @@
             }
         }, 1000);
 
-        // Ensure splash works properly on mobile
         document.addEventListener('DOMContentLoaded', function() {
             const splash = document.getElementById('splash');
             const splashImg = splash.querySelector('img');
             
-            // Force reflow to ensure animations work
             splash.style.animation = 'none';
             setTimeout(() => {
                 splash.style.animation = '';
             }, 10);
             
-            // Handle image load errors
             splashImg.onerror = function() {
                 console.log('Splash image failed to load');
-            };
-            
-            splashImg.onload = function() {
-                console.log('Splash image loaded successfully');
             };
         });
     </script>
@@ -247,49 +246,94 @@ document.addEventListener("DOMContentLoaded", () => {
     const flowerImages = ["f1.png", "f2.png", "f3.png", "f4.png", "f5.png", "f6.png", "f7.png", "f8.png", "f9.png",
         "f10.png", "f11.png"
     ];
-    let maxFlowers = window.innerWidth <= 600 ? 12 : 25;
+    
+    // Preload flower images to ensure they're ready
+    function preloadFlowerImages() {
+        flowerImages.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
+    }
+    
+    preloadFlowerImages();
+
+    let maxFlowers = window.innerWidth <= 600 ? 15 : 25;
 
     function createFlower() {
-        if (container.children.length > maxFlowers) return;
+        if (container.children.length >= maxFlowers) return;
 
         const flower = document.createElement("img");
         const randomFlower = flowerImages[Math.floor(Math.random() * flowerImages.length)];
         flower.src = randomFlower;
         flower.className = "flower";
+        flower.alt = "falling flower";
+
+        // Add error handling for flower images
+        flower.onerror = function() {
+            console.log('Flower image failed to load:', randomFlower);
+            // Create a simple fallback shape if image fails
+            this.style.backgroundColor = 'pink';
+            this.style.borderRadius = '50%';
+            this.style.border = '1px solid rgba(255,255,255,0.5)';
+        };
 
         const startX = Math.random() * window.innerWidth;
-        const fallTime = 6000 + Math.random() * 5000;
+        const fallTime = 4000 + Math.random() * 4000; // Shorter fall time for mobile
         const spin = (Math.random() * 360) + "deg";
 
         flower.style.left = startX + "px";
-        flower.style.top = "-40px";
-        flower.style.opacity = "0";
+        flower.style.top = "-50px";
+        flower.style.opacity = "1"; // Start visible
 
         container.appendChild(flower);
 
-        flower.animate(
+        // Use Web Animations API with better mobile support
+        const animation = flower.animate(
             [
-                { transform: `translateY(0px) rotate(0deg)`, opacity: 1 },
-                { transform: `translateY(${window.innerHeight + 40}px) rotate(${spin})`, opacity: 1 }
+                { 
+                    transform: `translateY(0px) rotate(0deg)`, 
+                    opacity: 0.8 
+                },
+                { 
+                    transform: `translateY(${window.innerHeight + 50}px) rotate(${spin})`, 
+                    opacity: 0.8 
+                }
             ],
             {
                 duration: fallTime,
-                easing: "linear"
+                easing: "linear",
+                fill: "forwards"
             }
-        ).onfinish = () => flower.remove();
+        );
+
+        animation.onfinish = () => {
+            if (flower.parentNode) {
+                flower.remove();
+            }
+        };
     }
 
-    // Handle window resize for mobile orientation changes
+    // Handle window resize
     window.addEventListener('resize', function() {
-        maxFlowers = window.innerWidth <= 600 ? 12 : 25;
+        maxFlowers = window.innerWidth <= 600 ? 15 : 25;
     });
 
+    // Start flower animation sooner and more frequently on mobile
+    const isMobile = window.innerWidth <= 600;
+    const startDelay = isMobile ? 2000 : 4500; // Start sooner on mobile
+    const intervalTime = isMobile ? 300 : 450; // More frequent on mobile
+
     setTimeout(() => {
-        setInterval(createFlower, 450);
-    }, 4500);
+        createFlower(); // Create first flower immediately
+        setInterval(createFlower, intervalTime);
+    }, startDelay);
+
+    // Debug: Check if flowers container is working
+    console.log('Flowers container:', container);
+    console.log('Mobile device:', isMobile);
 });
 
-// Prevent zoom on double-tap for mobile
+// Better touch handling
 document.addEventListener('touchstart', function(e) {
     if (e.touches.length > 1) {
         e.preventDefault();
@@ -304,6 +348,13 @@ document.addEventListener('touchend', function(e) {
     }
     lastTouchEnd = now;
 }, false);
+
+// Force redraw for mobile browsers
+window.addEventListener('load', function() {
+    document.body.style.display = 'none';
+    document.body.offsetHeight; // Trigger reflow
+    document.body.style.display = 'block';
+});
 </script>
 
 </body>
