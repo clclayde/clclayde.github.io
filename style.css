@@ -1,0 +1,79 @@
+@font-face {
+  font-family: 'ZRTW HackyNote';
+  src: url('fonts/ZRTWHackyNote-Regular.otf') format('truetype');
+}
+
+:root {
+  --bg: #ffeef1;
+  --fg: #000000;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'ZRTW HackyNote', monospace;
+  padding: 32px;
+}
+
+.container {
+  max-width: 1400px;
+  margin: auto;
+}
+
+h1 {
+  font-size: clamp(48px, 12vw, 160px);
+  line-height: 0.9;
+}
+
+nav {
+  margin: 32px 0 64px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+nav a {
+  color: var(--fg);
+  text-decoration: none;
+  border-bottom: 4px solid var(--fg);
+  font-size: 24px;
+}
+
+section {
+  margin-bottom: 96px;
+}
+
+h2 {
+  font-size: 64px;
+  margin-bottom: 24px;
+}
+
+.text {
+  font-size: 28px;
+  max-width: 800px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 32px;
+}
+
+.card {
+  border: 6px solid var(--fg);
+  padding: 24px;
+  font-size: 24px;
+  text-decoration: none;
+  color: var(--fg);
+}
+
+@media (max-width: 600px) {
+  body { padding: 16px; }
+  h2 { font-size: 42px; }
+}

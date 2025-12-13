@@ -1,451 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>,.,.,.,.</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        #splash {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            opacity: 0;
-            animation: fadeIn 1s ease-out forwards, fadeOut 1s ease-in forwards 4.5s;
-            z-index: 9999;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        #splash img {
-            width: auto;
-            height: auto;
-            max-width: 420px;
-            max-height: 420px;
-            width: 100%;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes fadeOut {
-            0% { opacity: 1; }
-            100% { opacity: 0; visibility: hidden; }
-        }
-
-        .shake-on-click {
-            display: inline-block;
-            transition: none;
-        }
-
-        .shaking {
-            animation: furiousShake 0.1s infinite;
-        }
-
-        @keyframes furiousShake {
-            0% { transform: translateX(0) translateY(0); }
-            10% { transform: translateX(-3px) translateY(-2px); }
-            20% { transform: translateX(3px) translateY(2px); }
-            30% { transform: translateX(-4px) translateY(-3px); }
-            40% { transform: translateX(4px) translateY(3px); }
-            50% { transform: translateX(-5px) translateY(-4px); }
-            60% { transform: translateX(5px) translateY(4px); }
-            70% { transform: translateX(-4px) translateY(-3px); }
-            80% { transform: translateX(4px) translateY(3px); }
-            90% { transform: translateX(-3px) translateY(-2px); }
-            100% { transform: translateX(0) translateY(0); }
-        }
-
-        /* Vendor prefixes for iOS */
-        @-webkit-keyframes furiousShake {
-            0% { -webkit-transform: translateX(0) translateY(0); }
-            10% { -webkit-transform: translateX(-3px) translateY(-2px); }
-            20% { -webkit-transform: translateX(3px) translateY(2px); }
-            30% { -webkit-transform: translateX(-4px) translateY(-3px); }
-            40% { -webkit-transform: translateX(4px) translateY(3px); }
-            50% { -webkit-transform: translateX(-5px) translateY(-4px); }
-            60% { -webkit-transform: translateX(5px) translateY(4px); }
-            70% { -webkit-transform: translateX(-4px) translateY(-3px); }
-            80% { -webkit-transform: translateX(4px) translateY(3px); }
-            90% { -webkit-transform: translateX(-3px) translateY(-2px); }
-            100% { -webkit-transform: translateX(0) translateY(0); }
-        }
-
-        .alpha {
-            color: rgb(210, 135, 74);
-        }
-
-        .released {
-            color: rgb(89, 255, 47);
-        }
-
-        .sileo {
-            color: teal;
-        }
-
-        .cydia {
-            color: burlywood;
-        }
-
-        .nolink {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        .sourcecode {
-            color: pink;
-            text-decoration: none;
-        }
-
-        #flowers {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; 
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .flower {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            will-change: transform;
-            filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.2));
-            -webkit-filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.2));
-            z-index: 1;
-        }
-
-        .falling {
-            animation-name: fall;
-            animation-timing-function: linear;
-            animation-fill-mode: forwards;
-        }
-
-        a.nolink {
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        @keyframes fall {
-            to {
-                transform: translateY(calc(100vh + 50px));
-            }
-        }
-
-        @media (max-width: 600px) {
-            .flower {
-                width: 25px;
-                height: 25px;
-            }
-            
-            body {
-                margin: 15px 12px;
-                font-family: Arial, sans-serif;
-            }
-            
-            #splash {
-                padding: 15px;
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-            }
-            
-            #splash img {
-                max-width: 90%;
-                max-height: 60vh;
-            }
-            
-            h1 {
-                font-size: 1.8em;
-                margin: 0.8em 0;
-            }
-            
-            h2 {
-                font-size: 1.4em;
-                margin: 0.7em 0;
-            }
-            
-            p, li {
-                font-size: 1em;
-                line-height: 1.4;
-            }
-            
-            ul {
-                padding-left: 20px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            body {
-                margin: 12px 10px;
-            }
-            
-            #splash {
-                padding: 10px;
-            }
-            
-            #splash img {
-                max-width: 95%;
-                max-height: 50vh;
-            }
-            
-            .flower {
-                width: 20px;
-                height: 20px;
-            }
-            
-            h1 {
-                font-size: 1.6em;
-            }
-            
-            h2 {
-                font-size: 1.3em;
-            }
-        }
-
-        body {
-            margin: 20px;
-            font-family: Arial, sans-serif;
-            -webkit-text-size-adjust: 100%;
-        }
-    </style>
-
-    <script>
-        let timeLeft = 4;
-        const titleTimer = setInterval(() => {
-            document.title = `a luh bit of information - ${timeLeft}s left`;
-            timeLeft--;
-            if (timeLeft < 0) {
-                clearInterval(titleTimer);
-                document.title = "clclayde.github.io";
-            }
-        }, 1000);
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const shakeLinks = document.querySelectorAll('a[href="#"].shake-on-click');
-            
-            shakeLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault(); 
-                    
-                    this.classList.add('shaking');
-                    
-                    void this.offsetWidth;
-                    
-                    setTimeout(() => {
-                        this.classList.remove('shaking');
-                    }, 300);
-                });
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const splash = document.getElementById('splash');
-            const splashImg = splash.querySelector('img');
-            
-            setTimeout(() => {
-                splash.style.webkitAnimation = 'none';
-                setTimeout(() => {
-                    splash.style.webkitAnimation = '';
-                }, 10);
-            }, 100);
-            
-            splashImg.onerror = function() {
-                console.log('Splash image failed to load');
-            };
-        });
-    </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brutalist Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
+  <div class="container">
+    <header>
+      <h1>@clclayde</h1>
+      <nav>
+        <a href="#projects">Projects</a>
+        <a href="#languages">Languages</a>
+        <a href="#links">Links</a>
+      </nav>
+    </header>
 
-<div id="flowers"></div>
+    <section id="projects">
+      <h2>projects</h2>
+      <div class="grid">
+        <div class="card">solstice - a ui wrapper for checkra1n written in bash</div>
+        <div class="card">ipsw legacy - a ipsw browser for legacy devices</div>
+        <div class="card">brutalis====t templates - brutalist-designed portfolios</div>
+        <div class="card">samp-monitor - a samp server monitor designed for nodemcu esp eight two six six microcontrollers written in arduino</div>
+        <div class="card">whisk - a mpeg-four downloader written in python</div>
+        <div class="card">whisk converter - a mpeg-four to mp3 converter written in python (again)</div>
+        <div class="card">jailbrowser - a clean web tool that matches iOS devices with compatible jailbreaks </div>
+      </div>
+    </section>
 
-<div id="splash">
-    <img src="information.png" alt="information" onerror="this.style.display='none'">
-</div>
+    <section id="languages">
+      <h2>languages</h2>
+      <div class="grid">
+        <p class="text">html, css, javascript, arduino, pawn, c, batch, bash</p>
+      </div>
+    </section>
 
-<a href="https://imgur.com/a/rA0WnoE" target="_blank" class="nolink">
-    <h1 title="click to see me face lol">Clayde Loyola</h1>
-</a>
+    <section id="links">
+      <h2>links</h2>
+      <div class="grid">
+        <a class="card" href="https://www.facebook.com/clclayde" target="_blank">Facebook</a>
+        <a class="card" href="https://github.com/clclayde" target="_blank">GitHub</a>
+        <a class="card" href="https://mail.google.com/mail/u/0/?fs=1&tf=cm&to=2009.claydeloyola@email.com">Gmail</a>
+      </div>
+    </section>
+  </div>
 
-<p>
-    Welcome to my portfolio website. I intentionally made my website look simple,
-    inspired by the oldest website ever created (which is info.cern.ch) (gotta love archive web)
-</p>
-
-<hr>
-
-<h2>About Me</h2>
-<p>
-    My name is Clayde Loyola. Currently living in the Philippines, and I am a person interested in technology, learning,
-    and creating things on the internet. 
-</p>
-
-<h2>Languages</h2>
-<p> HTML, CSS, JS, PAWN, C, C++, Arduino, Swift (currently learning)</p>
-
-<h2>Projects</h2>
-<ul>
-    <a href="#" target="_blank" class="nolink shake-on-click" title="Solstice - A Linux distribution designed for jailbreaking iOS devices using checkra1n.">
-        Solstice - A Linux distribution designed for jailbreaking iOS devices using checkra1n.
-        <br>
-        <small style="color: #e6e6e6; margin-left: 10px;">Status: In Development</small>
-    </a>
-
-    <a href="https://github.com/clclayde/creativeroleplay/" class="nolink" target="_blank" title="Creative Roleplay - A SA-MP Gamemode written in PAWN inspired by Los Santos Roleplay and is based on a zGaming edit i found on burgershot.">
-        Creative Roleplay - A SA-MP Gamemode written in PAWN inspired by Los Santos Roleplay and is based on a zGaming edit i found on burgershot.
-        <br>
-        <small style="color: #e6e6e6; margin-left: 10px;">Status: <span class="alpha">Alpha</span></small>
-    </a>
-
-    <a href="#" target="_blank" class="nolink shake-on-click" title="County Trucking - A SA-MP Trucking Gamemode written in PAWN.">
-        County Trucking - A SA-MP Trucking Gamemode written in PAWN.
-        <br>
-        <small style="color: #e6e6e6; margin-left: 10px;">Status: In Development</small>
-    </a>
-
-    <a href="jailbrowser.html" target="_blank" class="nolink" title="Jailbrowser - A clean web tool that matches iOS devices with compatible jailbreaks">
-        Jailbrowser - A clean web tool that matches iOS devices with compatible jailbreaks
-        <br>
-        <small style="color: #e6e6e6; margin-left: 10px;">Status: <span class="released">Experimental Release</span></small>
-    </a>
-</ul>
-
-<h2>Links</h2>
-<ul>
-    <li><a href="https://www.facebook.com/clclayde" target="_blank" rel="noopener" class="nolink">Facebook</a></li>
-    <li><a href="https://github.com/clclayde" target="_blank" class="nolink">Github</a></li>
-    <li><a href="https://mail.google.com/mail/u/0/?fs=1&tf=cm&to=2009.claydeloyola@email.com" class="nolink">Slide me a mail</a></li>
-    <li><a href="sileo://source/https://clclayde.github.io/" class="nolink"><span class="sileo">Sileo</span> Repository</a></li>
-    <li><a href="cydia://url/https://cydia.saurik.com/api/share#?source=%20https://clclayde.github.io/" class="nolink"><span class="cydia">Cydia</span> Repository</a></li>
-</ul>
-
-<hr>
-
-<p>Date created: November 29, 2025 - Lines of Code: 451 - <a href="https://github.com/clclayde/clclayde.github.io/" class="sourcecode" target="_blank">Source Code</a></p>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const container = document.getElementById("flowers");
-    const flowerImages = ["f1.png", "f2.png", "f3.png", "f4.png", "f5.png", "f6.png", "f7.png", "f8.png", "f9.png",
-        "f10.png", "f11.png"
-    ];
-    
-    function preloadFlowerImages() {
-        flowerImages.forEach(src => {
-            const img = new Image();
-            img.src = src;
-        });
-    }
-    
-    preloadFlowerImages();
-
-    let maxFlowers = window.innerWidth <= 600 ? 15 : 25;
-
-    function createFlower() {
-        if (container.children.length >= maxFlowers) return;
-
-        const flower = document.createElement("img");
-        const randomFlower = flowerImages[Math.floor(Math.random() * flowerImages.length)];
-        flower.src = randomFlower;
-        flower.className = "flower";
-        flower.alt = "falling flower";
-
-        flower.onerror = function() {
-            const fallback = document.createElement("div");
-            fallback.className = "flower";
-            fallback.style.backgroundColor = 'pink';
-            fallback.style.borderRadius = '50%';
-            fallback.style.border = '1px solid rgba(255,255,255,0.5)';
-            fallback.style.width = '25px';
-            fallback.style.height = '25px';
-            container.appendChild(fallback);
-            animateFlowerCSS(fallback);
-            return;
-        };
-
-        container.appendChild(flower);
-        animateFlowerCSS(flower);
-    }
-
-    function animateFlowerCSS(flower) {
-        const startX = Math.random() * window.innerWidth;
-        const fallTime = 4000 + Math.random() * 4000;
-        const spin = Math.random() * 360;
-        
-        flower.style.left = startX + 'px';
-        flower.style.top = '-50px';
-        flower.style.opacity = '0.8';
-        
-        flower.style.transform = 'rotate(' + spin + 'deg)';
-        flower.style.webkitTransform = 'rotate(' + spin + 'deg)';
-        
-        flower.classList.add('falling');
-        flower.style.animationDuration = fallTime + 'ms';
-        
-        setTimeout(function() {
-            if (flower.parentNode) {
-                flower.parentNode.removeChild(flower);
-            }
-        }, fallTime);
-    }
-
-    window.addEventListener('resize', function() {
-        maxFlowers = window.innerWidth <= 600 ? 15 : 25;
-    });
-
-    const supportsWebAnimations = 'animate' in document.documentElement;
-    
-    const isMobile = window.innerWidth <= 600;
-    const startDelay = isMobile ? 2000 : 4500;
-    const intervalTime = isMobile ? 300 : 450;
-
-    setTimeout(function() {
-        createFlower();
-        setInterval(createFlower, intervalTime);
-    }, startDelay);
-});
-
-document.addEventListener('touchstart', function(e) {
-    if (e.touches.length > 1) {
-        e.preventDefault();
-    }
-}, false);
-
-var lastTouchEnd = 0;
-document.addEventListener('touchend', function(e) {
-    var now = (new Date()).getTime();
-    if (now - lastTouchEnd <= 300) {
-        e.preventDefault();
-    }
-    lastTouchEnd = now;
-}, false);
-
-if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
-    document.addEventListener('touchmove', function(e) {
-        if (e.scale !== 1) {
-            e.preventDefault();
-        }
-    }, false);
-    
-    var style = document.createElement('style');
-    style.textContent = '.flower { -webkit-transform: translateZ(0); transform: translateZ(0); }';
-    document.head.appendChild(style);
-}
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>
